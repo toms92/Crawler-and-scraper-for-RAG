@@ -1,0 +1,11 @@
+services:
+  scraper:
+    build: .
+    container_name: python_scraper
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Se hai bisogno di mantenere il container attivo per il debug:
+    # tty: true
+    # stdin_open: true
