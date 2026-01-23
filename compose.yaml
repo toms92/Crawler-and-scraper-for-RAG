@@ -1,11 +1,10 @@
 services:
-  scraper:
-    build: .
-    container_name: python_scraper
+  crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - .:/app
-    environment:
-      - PYTHONUNBUFFERED=1
-    # Se hai bisogno di mantenere il container attivo per il debug:
-    # tty: true
-    # stdin_open: true
+      - ./data:/app/data
+    working_dir: /app/Crawler/Crawler
+    command: scrapy crawl primo_spyder

@@ -1,5 +1,5 @@
 # Usa la versione di Python specifica del progetto
-FROM python:3.8.3-slim
+FROM python:3.8.3-slim AS crawler
 
 # Imposta la directory di lavoro nel container
 WORKDIR /app
@@ -12,4 +12,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Comando di default (puoi cambiarlo con il tuo script principale)
-CMD ["python", "main.py"]
+CMD ["scrapy", "crawl", "primo_spider"]
+
+
