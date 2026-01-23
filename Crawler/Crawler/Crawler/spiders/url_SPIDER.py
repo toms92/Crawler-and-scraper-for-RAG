@@ -4,7 +4,7 @@ from scrapy.linkextractors import LinkExtractor
 class UrlSpider(CrawlSpider):
 
     name = "primo_spyder"
-    allowed_domains = ["giallozafferano.it"]
+    allowed_domains = ["ricette.giallozafferano.it"]
     start_urls = ["https://www.giallozafferano.it/ricette-cat/"]
 
     custom_settins = {
