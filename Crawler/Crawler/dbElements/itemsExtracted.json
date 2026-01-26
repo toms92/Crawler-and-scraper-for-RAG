@@ -1,0 +1,405 @@
+[
+  {
+    "url": "https://ricette.giallozafferano.it/Tiramisu.html",
+    "titolo": "Tiramisù",
+    "categoria": "Dolci",
+    "immagine": "https://www.giallozafferano.it/images/237-23742/Tiramisu_650x433_wm.jpg",
+    "difficolta": "Facile",
+    "tempi": {
+      "preparazione": "40 min",
+      "cottura": "6 min",
+      "nota": "Nota"
+    },
+    "costo": "Medio",
+    "dosi": "8 persone",
+    "ingredienti": [
+      {
+        "nome": "Mascarpone",
+        "quantita": "750 g"
+      },
+      {
+        "nome": "Uova",
+        "quantita": "freschissime (circa 5 medie) 260 g"
+      },
+      {
+        "nome": "Savoiardi",
+        "quantita": "250 g"
+      },
+      {
+        "nome": "Zucchero",
+        "quantita": "120 g"
+      },
+      {
+        "nome": "Caffè",
+        "quantita": "(della moka, zuccherato a piacere) 300 g"
+      },
+      {
+        "nome": "Cacao amaro in polvere",
+        "quantita": "q.b."
+      }
+    ],
+    "macronutrienti": {
+      "Energia": {
+        "valore": "543,3",
+        "unita": "Kcal"
+      },
+      "Carboidrati": {
+        "valore": "34,3",
+        "unita": "g"
+      },
+      "di cui zuccheri": {
+        "valore": "19,3",
+        "unita": "g"
+      },
+      "Proteine": {
+        "valore": "12,1",
+        "unita": "g"
+      },
+      "Grassi": {
+        "valore": "40,4",
+        "unita": "g"
+      },
+      "di cui saturi": {
+        "valore": "21,3",
+        "unita": "g"
+      },
+      "Fibre": {
+        "valore": "0,5",
+        "unita": "g"
+      },
+      "Colesterolo": {
+        "valore": "216,5",
+        "unita": "mg"
+      },
+      "Sodio": {
+        "valore": "522,7",
+        "unita": "mg"
+      }
+    },
+    "tag_dietetici": [
+      "Vegetariano"
+    ]
+  },
+  {
+    "url": "https://ricette.giallozafferano.it/Torta-tenerina.html",
+    "titolo": "Torta tenerina",
+    "categoria": "Dolci",
+    "immagine": "https://www.giallozafferano.it/images/242-24248/Torta-tenerina_650x433_wm.jpg",
+    "difficolta": "Facile",
+    "tempi": {
+      "preparazione": "20 min",
+      "cottura": "25 min",
+      "nota": "Nota"
+    },
+    "costo": "Medio",
+    "dosi": "8 persone",
+    "ingredienti": [
+      {
+        "nome": "Cioccolato fondente al 55%",
+        "quantita": "200 g"
+      },
+      {
+        "nome": "Burro",
+        "quantita": "100 g"
+      },
+      {
+        "nome": "Uova",
+        "quantita": "medie 4"
+      },
+      {
+        "nome": "Zucchero",
+        "quantita": "150 g"
+      },
+      {
+        "nome": "Farina 00",
+        "quantita": "50 g"
+      },
+      {
+        "nome": "Zucchero a velo",
+        "quantita": "q.b."
+      }
+    ],
+    "macronutrienti": {
+      "Energia": {
+        "valore": "369,1",
+        "unita": "Kcal"
+      },
+      "Carboidrati": {
+        "valore": "36,2",
+        "unita": "g"
+      },
+      "di cui zuccheri": {
+        "valore": "25,8",
+        "unita": "g"
+      },
+      "Proteine": {
+        "valore": "5,4",
+        "unita": "g"
+      },
+      "Grassi": {
+        "valore": "22,9",
+        "unita": "g"
+      },
+      "di cui saturi": {
+        "valore": "13,1",
+        "unita": "g"
+      },
+      "Fibre": {
+        "valore": "2,9",
+        "unita": "g"
+      },
+      "Colesterolo": {
+        "valore": "107,6",
+        "unita": "mg"
+      },
+      "Sodio": {
+        "valore": "37,2",
+        "unita": "mg"
+      }
+    },
+    "tag_dietetici": [
+      "Vegetariano"
+    ]
+  },
+  {
+    "url": "https://ricette.giallozafferano.it/Tortino-di-cioccolato-con-cuore-fondente.html",
+    "titolo": "Tortino di cioccolato con cuore fondente",
+    "categoria": "ChefCHEF",
+    "immagine": "https://www.giallozafferano.it/images/235-23566/Tortino-di-cioccolato-con-cuore-fondente_650x433_wm.jpg",
+    "difficolta": "Facile",
+    "tempi": {
+      "preparazione": "20 min",
+      "cottura": "15 min",
+      "nota": "Nota"
+    },
+    "costo": "Basso",
+    "dosi": "4 pezzi",
+    "ingredienti": [
+      {
+        "nome": "Cioccolato fondente al 70%",
+        "quantita": "110 g"
+      },
+      {
+        "nome": "Burro",
+        "quantita": "a temperatura ambiente 110 g"
+      },
+      {
+        "nome": "Uova",
+        "quantita": "(2 grandi) 120 g"
+      },
+      {
+        "nome": "Zucchero",
+        "quantita": "40 g"
+      },
+      {
+        "nome": "Farina 00",
+        "quantita": "25 g"
+      },
+      {
+        "nome": "Burro",
+        "quantita": "q.b."
+      },
+      {
+        "nome": "Farina 00",
+        "quantita": "q.b."
+      },
+      {
+        "nome": "Zucchero a velo",
+        "quantita": "q.b."
+      }
+    ],
+    "macronutrienti": {
+      "Energia": {
+        "valore": "474",
+        "unita": "Kcal"
+      },
+      "Carboidrati": {
+        "valore": "29,5",
+        "unita": "g"
+      },
+      "di cui zuccheri": {
+        "valore": "17,9",
+        "unita": "g"
+      },
+      "Proteine": {
+        "valore": "6,9",
+        "unita": "g"
+      },
+      "Grassi": {
+        "valore": "36,9",
+        "unita": "g"
+      },
+      "di cui saturi": {
+        "valore": "21,6",
+        "unita": "g"
+      },
+      "Fibre": {
+        "valore": "3,2",
+        "unita": "g"
+      },
+      "Colesterolo": {
+        "valore": "171,6",
+        "unita": "mg"
+      },
+      "Sodio": {
+        "valore": "51,4",
+        "unita": "mg"
+      }
+    },
+    "tag_dietetici": [
+      "Vegetariano"
+    ]
+  },
+  {
+    "url": "https://ricette.giallozafferano.it/Crepes-dolci-e-salate-ricetta-base.html",
+    "titolo": "Crepe dolci e salate (ricetta base)",
+    "categoria": "Dolci",
+    "immagine": "https://www.giallozafferano.it/images/241-24147/Crepes-dolci-e-salate-ricetta-base_650x433_wm.jpg",
+    "difficolta": "Facile",
+    "tempi": {
+      "preparazione": "10 min",
+      "cottura": "15 min",
+      "nota": "Nota"
+    },
+    "costo": "Basso",
+    "dosi": "14 pezzi",
+    "ingredienti": [
+      {
+        "nome": "Uova",
+        "quantita": "(medie) 3"
+      },
+      {
+        "nome": "Farina 00",
+        "quantita": "250 g"
+      },
+      {
+        "nome": "Latte intero",
+        "quantita": "500 g"
+      },
+      {
+        "nome": "Burro",
+        "quantita": "40 g"
+      },
+      {
+        "nome": "Burro",
+        "quantita": "q.b."
+      }
+    ],
+    "macronutrienti": {
+      "Energia": {
+        "valore": "130,7",
+        "unita": "Kcal"
+      },
+      "Carboidrati": {
+        "valore": "15,4",
+        "unita": "g"
+      },
+      "di cui zuccheri": {
+        "valore": "1,9",
+        "unita": "g"
+      },
+      "Proteine": {
+        "valore": "4,2",
+        "unita": "g"
+      },
+      "Grassi": {
+        "valore": "5,7",
+        "unita": "g"
+      },
+      "di cui saturi": {
+        "valore": "3,1",
+        "unita": "g"
+      },
+      "Fibre": {
+        "valore": "0,5",
+        "unita": "g"
+      },
+      "Colesterolo": {
+        "valore": "47,1",
+        "unita": "mg"
+      },
+      "Sodio": {
+        "valore": "29,3",
+        "unita": "mg"
+      }
+    },
+    "tag_dietetici": [
+      "Light",
+      "Vegetariano"
+    ]
+  },
+  {
+    "url": "https://ricette.giallozafferano.it/Crema-al-mascarpone.html",
+    "titolo": "Crema al mascarpone",
+    "categoria": "Dolci",
+    "immagine": "https://www.giallozafferano.it/images/238-23891/Crema-al-mascarpone_650x433_wm.jpg",
+    "difficolta": "Molto facile",
+    "tempi": {
+      "preparazione": "15 min",
+      "cottura": "10 min"
+    },
+    "costo": "Basso",
+    "dosi": "4 persone",
+    "ingredienti": [
+      {
+        "nome": "Mascarpone",
+        "quantita": "a temperatura ambiente 500 g"
+      },
+      {
+        "nome": "Zucchero",
+        "quantita": "125 g"
+      },
+      {
+        "nome": "Tuorli",
+        "quantita": "a temperatura ambiente 4"
+      },
+      {
+        "nome": "Acqua",
+        "quantita": "50 g"
+      },
+      {
+        "nome": "Cacao amaro in polvere",
+        "quantita": "q.b."
+      }
+    ],
+    "macronutrienti": {
+      "Energia": {
+        "valore": "774",
+        "unita": "Kcal"
+      },
+      "Carboidrati": {
+        "valore": "33.8",
+        "unita": "g"
+      },
+      "di cui zuccheri": {
+        "valore": "33",
+        "unita": "g"
+      },
+      "Proteine": {
+        "valore": "13.4",
+        "unita": "g"
+      },
+      "Grassi": {
+        "valore": "65",
+        "unita": "g"
+      },
+      "di cui saturi": {
+        "valore": "36.94",
+        "unita": "g"
+      },
+      "Fibre": {
+        "valore": "2.2",
+        "unita": "g"
+      },
+      "Colesterolo": {
+        "valore": "319",
+        "unita": "mg"
+      },
+      "Sodio": {
+        "valore": "186",
+        "unita": "mg"
+      }
+    },
+    "tag_dietetici": null
+  }
+]

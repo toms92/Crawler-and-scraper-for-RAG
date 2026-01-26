@@ -11,7 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia il resto del codice
 COPY . .
 
-# Comando di default (puoi cambiarlo con il tuo script principale)
-CMD ["scrapy", "crawl", "primo_spider"]
+
 
 
