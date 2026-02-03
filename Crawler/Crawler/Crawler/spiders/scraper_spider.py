@@ -362,7 +362,7 @@ def main(input_file, output_file):
     risultati = []
 
     # Processa ogni elemento
-    for i, item in enumerate(data[:5], 1):  # [:5] limita a 5 per test
+    for i, item in enumerate(data, 1):  # [:5] limita a 5 per test
         # Estrai l'URL dall'oggetto
         if isinstance(item, dict) and 'url' in item:
             url = item['url']  # <-- QUI ESTRAE L'URL DALL'OGGETTO
@@ -386,6 +386,6 @@ def main(input_file, output_file):
 if __name__ == "__main__":
     # Specifica i file di input e output
     input_file = r"C:\Users\tomma\Documents\PythonProjects\CrawlAndScrape\Crawler\Crawler\outputNew\links_finali.json"
-    output_file = r"C:\Users\tomma\Documents\PythonProjects\CrawlAndScrape\Crawler\Crawler\dbElements\itemsExtracted.json"
+    output_file = r"/itemsExtracted.json"
 
     main(input_file, output_file)

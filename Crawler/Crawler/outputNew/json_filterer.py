@@ -112,7 +112,7 @@ def main(input_file, output_file):
 if __name__ == "__main__":
     # Specifica i file di input e output
     input_file = r"C:\Users\tomma\Documents\PythonProjects\CrawlAndScrape\Crawler\Crawler\outputNew\links_finali.json"  # File con la lista degli URL
-    output_file = r"C:\Users\tomma\Documents\PythonProjects\CrawlAndScrape\Crawler\Crawler\dbElements\itemsExtracted.json"  # File con i dati estratti
+    output_file = r"/itemsExtracted.json"  # File con i dati estratti
 
     main(input_file, output_file)
 

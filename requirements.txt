@@ -1,10 +1,18 @@
+
 # Librerie principali
 requests==2.31.0
 beautifulsoup4==4.12.2
 lxml==4.9.3
 
-# Se usi un framework più avanzato
- scrapy==2.11.0
+# Framework crawler
+scrapy==2.11.0
+
+# ChromaDB per il sistema RAG
+chromadb>=0.4.0
+
+# Dipendenze opzionali per ChromaDB (migliori performance)
+# hnswlib>=0.7.0
+# pydantic>=1.10.0
 
 # Se usi automazione browser (richiede setup extra in Docker)
 # playwright==1.40.0

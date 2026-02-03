@@ -5,6 +5,25 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/app
-      - ./data:/app/data
+      - ./Crawler/Crawler/dbElements:/app/Crawler/Crawler/dbElements
+      - ./chroma_db:/app/chroma_db
     working_dir: /app/Crawler/Crawler
     command: scrapy crawl primo_spyder
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  # Servizio per caricare JSON in ChromaDB
+  load-chromadb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./Crawler/Crawler/dbElements:/app/Crawler/Crawler/dbElements
+      - ./chroma_db:/app/chroma_db
+    working_dir: /app/Crawler/Crawler/dbElements
+    command: python run_pipeline.py
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles:
+      - chromadb  # Esegui con: docker compose --profile chromadb up load-chromadb
