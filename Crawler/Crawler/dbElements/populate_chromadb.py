@@ -5,9 +5,9 @@ Questo script crea un database vettoriale per un sistema RAG
 
 import json
 import chromadb
-from chromadb.config import Settings
 from typing import List, Dict, Any
 import os
+import shutil
 
 
 def load_json_data(json_path: str) -> List[Dict[str, Any]]:
@@ -174,6 +174,12 @@ def populate_chromadb(
         persist_directory: Directory dove salvare il database
         reset_db: Se True, elimina e ricrea la collection
     """
+    # Verifica versione ChromaDB
+    ver = getattr(chromadb, "__version__", None)
+    print(f"Versione ChromaDB rilevata: {ver}")
+    if ver != "0.5.3":
+        raise RuntimeError(f"ChromaDB non è alla versione richiesta: attesa 0.5.3, trovata {ver}")
+    
     # Carica i dati
     print("Caricamento dati dal JSON...")
     recipes = load_json_data(json_path)
@@ -187,6 +193,13 @@ def populate_chromadb(
     
     # Inizializza ChromaDB
     print(f"\nInizializzazione ChromaDB in: {persist_directory}")
+    if reset_db and os.path.exists(persist_directory):
+        print(f"Eliminazione directory del database esistente: {persist_directory}")
+        try:
+            shutil.rmtree(persist_directory, ignore_errors=True)
+        except Exception as e:
+            print(f"Avviso: impossibile eliminare la directory '{persist_directory}': {e}")
+        os.makedirs(persist_directory, exist_ok=True)
     client = chromadb.PersistentClient(path=persist_directory)
     
     # Gestione collection
@@ -194,8 +207,9 @@ def populate_chromadb(
         if reset_db:
             print(f"Eliminazione collection esistente: {collection_name}")
             client.delete_collection(name=collection_name)
-    except:
-        pass
+    except Exception as e:
+        # Non bloccare il flusso se la collection non esiste
+        print(f"Avviso: impossibile eliminare la collection '{collection_name}': {e}")
     
     # Crea o ottieni la collection
     print(f"Creazione/apertura collection: {collection_name}")

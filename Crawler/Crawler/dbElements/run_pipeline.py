@@ -17,12 +17,21 @@ class RecipesPipeline:
     def __init__(
             self,
             json_file: str = "itemsExtracted.json",
-            chroma_dir: str = "/app/chroma_db"
+            chroma_dir: str = None
     ):
         # Usa il path relativo per il JSON (nella stessa directory dello script)
         self.json_file = Path(json_file)
-        # ChromaDB va nella root del progetto
-        self.chroma_dir = Path(chroma_dir)
+        # Determina dinamicamente la directory per ChromaDB
+        if chroma_dir is None:
+            docker_root = Path("/app")
+            if docker_root.exists():
+                # Ambiente Docker
+                self.chroma_dir = docker_root / "chroma_db"
+            else:
+                # Ambiente locale: usa la root del progetto (3 livelli sopra questo file)
+                self.chroma_dir = Path(__file__).resolve().parents[3] / "chroma_db"
+        else:
+            self.chroma_dir = Path(chroma_dir)
 
         # Crea la directory ChromaDB se non esiste
         self.chroma_dir.mkdir(parents=True, exist_ok=True)
