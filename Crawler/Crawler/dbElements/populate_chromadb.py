@@ -5,9 +5,12 @@ Questo script crea un database vettoriale per un sistema RAG
 
 import json
 import chromadb
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import os
 import shutil
+
+# Embedding functions (ChromaDB 0.5.3)
+from chromadb.utils import embedding_functions
 
 
 def load_json_data(json_path: str) -> List[Dict[str, Any]]:
@@ -159,11 +162,19 @@ def create_recipe_metadata(recipe: Dict[str, Any]) -> Dict[str, Any]:
     return metadata
 
 
+def _build_embedding_function():
+    """
+    Restituisce la DefaultEmbeddingFunction di ChromaDB 0.5.3.
+    Non richiede configurazione di provider o modello.
+    """
+    return embedding_functions.DefaultEmbeddingFunction()
+
+
 def populate_chromadb(
     json_path: str,
     collection_name: str = "ricette",
     persist_directory: str = "./chroma_db",
-    reset_db: bool = False
+    reset_db: bool = False,
 ):
     """
     Popola ChromaDB con le ricette dal file JSON
@@ -201,6 +212,10 @@ def populate_chromadb(
             print(f"Avviso: impossibile eliminare la directory '{persist_directory}': {e}")
         os.makedirs(persist_directory, exist_ok=True)
     client = chromadb.PersistentClient(path=persist_directory)
+
+    # Costruisci embedding function
+    print("Embedding: DefaultEmbeddingFunction (ChromaDB)")
+    embedding_function = _build_embedding_function()
     
     # Gestione collection
     try:
@@ -215,7 +230,11 @@ def populate_chromadb(
     print(f"Creazione/apertura collection: {collection_name}")
     collection = client.get_or_create_collection(
         name=collection_name,
-        metadata={"description": "Database di ricette per sistema RAG"}
+        embedding_function=embedding_function,
+        metadata={
+            "description": "Database di ricette per sistema RAG",
+            "embedding": "DefaultEmbeddingFunction",
+        }
     )
     
     # Prepara i dati per ChromaDB
@@ -277,7 +296,10 @@ def populate_chromadb(
         print(f"  - {diff}: {count}")
 
 
-def test_search(collection_name: str = "ricette", persist_directory: str = "./chroma_db"):
+def test_search(
+    collection_name: str = "ricette",
+    persist_directory: str = "./chroma_db",
+):
     """
     Funzione di test per verificare il funzionamento della ricerca
     
@@ -290,7 +312,8 @@ def test_search(collection_name: str = "ricette", persist_directory: str = "./ch
     print("="*60)
     
     client = chromadb.PersistentClient(path=persist_directory)
-    collection = client.get_collection(name=collection_name)
+    ef = _build_embedding_function()
+    collection = client.get_collection(name=collection_name, embedding_function=ef)
     
     # Test query
     test_queries = [
@@ -317,20 +340,23 @@ def test_search(collection_name: str = "ricette", persist_directory: str = "./ch
 
 if __name__ == "__main__":
     # Configurazione
-    JSON_FILE = "itemsExtracted.json"  # Modifica con il percorso corretto
-    COLLECTION_NAME = "ricette"
-    DB_DIRECTORY = "./chroma_db"
+    import os
+    JSON_FILE = "itemsExtracted.json"  # percorso relativo alla dir dello script
+    COLLECTION_NAME = os.environ.get("CHROMA_COLLECTION", "ricette")
+    DB_DIRECTORY = os.environ.get("CHROMA_DIR", "./chroma_db")
+
+    RESET = os.environ.get("RESET_DB", "true").lower() in {"1", "true", "yes", "y"}
     
     # Popola il database
     populate_chromadb(
         json_path=JSON_FILE,
         collection_name=COLLECTION_NAME,
         persist_directory=DB_DIRECTORY,
-        reset_db=True  # Cambia a False se vuoi mantenere dati esistenti
+        reset_db=RESET,  # Cambia a False se vuoi mantenere dati esistenti
     )
     
     # Esegui test di ricerca
     test_search(
         collection_name=COLLECTION_NAME,
-        persist_directory=DB_DIRECTORY
+        persist_directory=DB_DIRECTORY,
     )

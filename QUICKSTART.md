@@ -1,6 +1,6 @@
-# 🚀 Quick Start - Crawler + ChromaDB
+# 🚀 Quick Start - JSON → ChromaDB Vector DB
 
-Guida rapida per utilizzare il sistema di crawling e indicizzazione ricette con ChromaDB.
+Questo progetto ha come scopo primario convertire il file `itemsExtracted.json` in un database vettoriale ChromaDB (versione 0.5.3) da usare in un sistema RAG esterno. Il crawler è stato rimosso.
 
 ## 📁 Struttura del Progetto
 
@@ -13,12 +13,10 @@ CrawlAndScrape/
 ├── chroma_db/                           # Database ChromaDB (auto-creato)
 └── Crawler/
     └── Crawler/
-        ├── spiders/
-        │   └── primo_spyder.py
         └── dbElements/                   # ← QUI vanno i tuoi script!
-            ├── itemsExtracted.json       # File JSON con le ricette
-            ├── run_pipeline.py           # Script di caricamento
-            ├── populate_chromadb.py      # Logica di popolazione
+            ├── itemsExtracted.json       # File JSON con le ricette (fornito da te)
+            ├── run_pipeline.py           # Script di caricamento JSON → ChromaDB
+            ├── populate_chromadb.py      # Logica di popolazione e embeddings
             └── esempio_utilizzo.py       # Esempi di ricerca
 ```
 
@@ -30,38 +28,34 @@ CrawlAndScrape/
   - `populate_chromadb.py`
   - `esempio_utilizzo.py`
 
+## 🧠 Embeddings (Default ChromaDB 0.5.3)
+
+Gli embedding vengono generati usando la DefaultEmbeddingFunction di ChromaDB. Non è necessaria alcuna configurazione di provider o modello.
+
+Variabili utili:
+- `CHROMA_DIR`: directory del database (default: `./chroma_db`)
+- `CHROMA_COLLECTION`: nome della collection (default: `ricette`)
+- `RESET_DB`: resetta il DB al primo avvio (`true`/`false`)
+
 ## 🎯 Workflow Base
 
-### Scenario 1: Prima Esecuzione (con crawler)
-
-Se non hai ancora estratto le ricette:
+Hai già il file `itemsExtracted.json` in `Crawler/Crawler/dbElements/`. Per convertirlo in un Vector DB ChromaDB:
 
 ```powershell
-# 1. Build dell'immagine Docker
+# 1) Build immagine (solo la prima volta)
 docker compose build
 
-# 2. Esegui il crawler per estrarre le ricette
-docker compose up crawler
-
-# 3. Carica le ricette in ChromaDB
-docker compose --profile chromadb up load-chromadb
+# 2) Esegui la pipeline JSON → ChromaDB (resetta il DB la prima volta)
+docker compose up vectordb
+# oppure con Make
+make build-vdb
 ```
 
-Con Make:
-```bash
-make first-run
-```
-
-### Scenario 2: Hai già il file JSON
-
-Se hai già `itemsExtracted.json` in `Crawler/Crawler/dbElements/`:
-
+Variabili d'ambiente utili (opzionali):
 ```powershell
-# Build (solo la prima volta)
-docker compose build
-
-# Carica direttamente in ChromaDB
-docker compose --profile chromadb up load-chromadb
+$env:CHROMA_DIR = "./chroma_db"                     # path DB
+$env:CHROMA_COLLECTION = "ricette"                  # nome collection
+$env:RESET_DB = "true"                              # reset alla partenza
 ```
 
 ## 📊 Verifica Risultati
@@ -69,11 +63,11 @@ docker compose --profile chromadb up load-chromadb
 Dopo aver caricato i dati:
 
 ```powershell
-# Testa il sistema RAG
-docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler python esempio_utilizzo.py
+# Testa una query di esempio
+docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb python esempio_utilizzo.py "primo piatto vegetariano"
 
 # Verifica statistiche database
-docker compose run --rm crawler python -c "import chromadb; client = chromadb.PersistentClient(path='/app/chroma_db'); collection = client.get_collection('ricette'); print(f'Ricette: {collection.count()}')"
+docker compose run --rm vectordb python -c "import chromadb; client = chromadb.PersistentClient(path='/app/chroma_db'); collection = client.get_collection('ricette'); print(f'Ricette: {collection.count()}')"
 ```
 
 Con Make:
@@ -91,7 +85,7 @@ Crawler/Crawler/dbElements/
 ├── run_pipeline.py          ← Metti qui
 ├── populate_chromadb.py     ← Metti qui
 ├── esempio_utilizzo.py      ← Metti qui
-└── itemsExtracted.json      ← Creato dal crawler
+└── itemsExtracted.json      ← Fornito da te (o da altra pipeline esterna)
 ```
 
 ### ✅ Dove viene creato il database:
@@ -111,14 +105,14 @@ I file Python devono essere in `Crawler/Crawler/dbElements/`, non nella root!
 Verifica che `itemsExtracted.json` sia in `Crawler/Crawler/dbElements/`:
 
 ```powershell
-docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler ls -lh itemsExtracted.json
+docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb ls -lh itemsExtracted.json
 ```
 
 ### Debug: Verifica struttura
 
 ```powershell
 # Entra nel container e naviga
-docker compose run --rm crawler bash
+docker compose run --rm vectordb bash
 cd /app/Crawler/Crawler/dbElements
 ls -la
 ```
@@ -128,19 +122,20 @@ ls -la
 ```powershell
 # Setup completo
 docker compose build
-docker compose up crawler
-docker compose --profile chromadb up load-chromadb
+
+# Costruisci il Vector DB da JSON
+docker compose up vectordb
 
 # Test
-docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler python esempio_utilizzo.py
+docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb python esempio_utilizzo.py
 
 # Shell nella directory corretta
-docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler bash
+docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb bash
 ```
 
 Con Make:
 ```bash
-make first-run    # Build + crawler + ChromaDB
+make build-vdb    # Build + creazione Vector DB
 make test         # Test sistema
 make stats        # Statistiche
 ```
@@ -148,30 +143,35 @@ make stats        # Statistiche
 ## 💡 Note Importanti
 
 1. **Script Python** → vanno in `Crawler/Crawler/dbElements/`
-2. **File JSON** → viene creato in `Crawler/Crawler/dbElements/` dal crawler
+2. **File JSON** → deve essere presente in `Crawler/Crawler/dbElements/` (fornito da te o da pipeline esterna)
 3. **Database ChromaDB** → viene creato in `./chroma_db/` (root del progetto)
 4. Il database **persiste** tra i riavvii Docker
 
 ## 🎉 Esempio Completo
 
 ```powershell
-# 1. Posiziona i file Python
-# Copia run_pipeline.py, populate_chromadb.py, esempio_utilizzo.py
-# in: Crawler/Crawler/dbElements/
+# 1. Posiziona i file Python e il JSON
+# Assicurati che questi file siano in: Crawler/Crawler/dbElements/
+# - run_pipeline.py
+# - populate_chromadb.py
+# - esempio_utilizzo.py
+# - itemsExtracted.json
 
-# 2. Build
-docker compose build
+# 2. Build immagine
+ docker compose build
 
-# 3. Crawler (se necessario)
-docker compose up crawler
+# 3. Crea il Vector DB (JSON → ChromaDB)
+ docker compose up vectordb
+ # Se hai modificato i servizi, puoi aggiungere: --remove-orphans
+ # docker compose up --remove-orphans vectordb
 
-# 4. Carica in ChromaDB
-docker compose --profile chromadb up load-chromadb
+# 4. Testa una query
+ docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb python esempio_utilizzo.py "primo piatto vegetariano"
 
-# 5. Testa
-docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler python esempio_utilizzo.py
+# 5. Statistiche
+ docker compose run --rm vectordb python -c "import chromadb; c=chromadb.PersistentClient(path='/app/chroma_db'); col=c.get_collection('ricette'); print(col.count())"
 
-# Output:
-# 📊 Database contiene 9998 ricette
+# Output atteso (esempio):
+# 📊 Ricette: 5652
 # ✅ Funziona!
 ```

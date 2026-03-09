@@ -1,4 +1,4 @@
-.PHONY: help build up down clean crawler load-chromadb all test logs shell
+.PHONY: help build up down clean build-vdb run-vdb test logs shell stats size check backup list-backups restore version check-json shell-dbElements python
 
 # Colori per output
 GREEN  := \033[0;32m
@@ -13,15 +13,15 @@ build: ## Costruisce l'immagine Docker
 	@echo "$(GREEN)Costruzione immagine Docker...$(NC)"
 	docker compose build
 
-up: ## Avvia tutti i servizi
-	@echo "$(GREEN)Avvio servizi...$(NC)"
-	docker compose up
+up: ## Avvia il servizio di Vector DB
+	@echo "$(GREEN)Avvio servizio Vector DB...$(NC)"
+	docker compose up vectordb
 
-down: ## Ferma tutti i servizi
+down: ## Ferma i servizi
 	@echo "$(GREEN)Arresto servizi...$(NC)"
 	docker compose down
 
-clean: ## Rimuove container, volumi e immagini
+clean: ## Rimuove container, volumi e immagini (⚠️ elimina il DB)
 	@echo "$(YELLOW)⚠️  ATTENZIONE: Questo rimuoverà tutti i dati!$(NC)"
 	@read -p "Sei sicuro? [y/N] " -n 1 -r; \
 	echo; \
@@ -35,40 +35,27 @@ clean: ## Rimuove container, volumi e immagini
 
 # Comandi specifici
 
-crawler: ## Esegue solo il crawler
-	@echo "$(GREEN)Esecuzione crawler...$(NC)"
-	docker compose up crawler
-
-load-chromadb: ## Carica JSON in ChromaDB
-	@echo "$(GREEN)Caricamento ricette in ChromaDB...$(NC)"
-	docker compose --profile chromadb up load-chromadb
-
-all: crawler load-chromadb ## Esegue crawler e poi carica in ChromaDB
-	@echo "$(GREEN)✅ Processo completato!$(NC)"
+build-vdb: ## Costruisce il Vector DB da itemsExtracted.json
+	@echo "$(GREEN)Costruzione Vector DB da JSON...$(NC)"
+	docker compose up vectordb
 
 # Comandi di utilità
 
-test: ## Testa il sistema RAG
+test: ## Esegue query di esempio sul Vector DB
 	@echo "$(GREEN)Test sistema RAG...$(NC)"
-	docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler python esempio_utilizzo.py
+	docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb python esempio_utilizzo.py
 
 logs: ## Mostra i logs
 	docker compose logs -f
 
-logs-crawler: ## Mostra i logs del crawler
-	docker compose logs -f crawler
-
-logs-chromadb: ## Mostra i logs del caricamento ChromaDB
-	docker compose --profile chromadb logs -f load-chromadb
-
-shell: ## Apre una shell nel container
-	docker compose run --rm crawler bash
+shell: ## Apre una shell nel container del Vector DB
+	docker compose run --rm vectordb bash
 
 shell-dbElements: ## Apre una shell nella directory dbElements
-	docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler bash
+	docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb bash
 
 python: ## Apre Python interattivo nel container
-	docker compose run --rm crawler python
+	docker compose run --rm vectordb python
 
 # Comandi di backup e ripristino
 
@@ -96,7 +83,7 @@ restore: ## Ripristina da backup (specifica file con FILE=nome_file)
 
 stats: ## Mostra statistiche del database
 	@echo "$(GREEN)Statistiche database:$(NC)"
-	@docker compose run --rm crawler python -c "import chromadb; client = chromadb.PersistentClient(path='/app/chroma_db'); collection = client.get_collection('ricette'); print(f'Ricette nel database: {collection.count()}')"
+	@docker compose run --rm vectordb python -c "import chromadb; client = chromadb.PersistentClient(path='/app/chroma_db'); collection = client.get_collection('ricette'); print(f'Ricette nel database: {collection.count()}')"
 
 size: ## Mostra dimensione del database
 	@echo "$(GREEN)Dimensione database ChromaDB:$(NC)"
@@ -106,40 +93,19 @@ check: ## Verifica configurazione
 	@echo "$(GREEN)Verifica configurazione...$(NC)"
 	@docker compose config
 
-# Workflow completi
-
-first-run: build all ## Prima esecuzione: build + crawler + ChromaDB
-	@echo "$(GREEN)✅ Setup completato!$(NC)"
-	@echo "$(YELLOW)Esegui 'make test' per testare il sistema$(NC)"
-
-daily-update: crawler load-chromadb backup ## Aggiornamento: crawler + ChromaDB + backup
-	@echo "$(GREEN)✅ Aggiornamento completato!$(NC)"
-
-rebuild: clean build all ## Ricostruzione completa: clean + build + all
-	@echo "$(GREEN)✅ Ricostruzione completata!$(NC)"
-
-# Sviluppo
-
-dev-crawler: ## Esegue crawler in modalità interattiva
-	docker compose run --rm crawler scrapy crawl primo_spyder
-
-lint: ## Verifica codice Python
-	docker compose run --rm crawler python -m flake8 . --exclude=venv,__pycache__ || true
-
 # Informazioni
 
 version: ## Mostra versioni software
 	@echo "$(GREEN)Versioni:$(NC)"
-	@docker compose run --rm crawler python --version
-	@docker compose run --rm crawler python -c "import chromadb; print(f'ChromaDB: {chromadb.__version__}')" 2>/dev/null || echo "ChromaDB: non installato"
-	@docker compose run --rm crawler python -c "import scrapy; print(f'Scrapy: {scrapy.__version__}')" 2>/dev/null || echo "Scrapy: non installato"
+	@docker compose run --rm vectordb python --version
+	@docker compose run --rm vectordb python -c "import chromadb; print(f'ChromaDB: {chromadb.__version__}')" 2>/dev/null || echo "ChromaDB: non installato"
 
 # Debug
 
 check-json: ## Verifica che il file JSON esista
 	@echo "$(GREEN)Verifica file JSON...$(NC)"
-	@docker compose run --rm --workdir /app/Crawler/Crawler/dbElements crawler ls -lh itemsExtracted.json
+	@docker compose run --rm --workdir /app/Crawler/Crawler/dbElements vectordb ls -lh itemsExtracted.json
 
 check-structure: ## Mostra struttura directory
 	@echo "$(GREEN)Struttura directory:$(NC)"
-	@docker compose run --rm crawler find /app/Crawler/Crawler/dbElements -type f -name "*.py" -o -name "*.json" | head -20
+	@docker compose run --rm vectordb find /app/Crawler/Crawler/dbElements -type f -name "*.py" -o -name "*.json" | head -20

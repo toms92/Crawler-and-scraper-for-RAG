@@ -17,7 +17,7 @@ class RecipesPipeline:
     def __init__(
             self,
             json_file: str = "itemsExtracted.json",
-            chroma_dir: str = None
+            chroma_dir: str = None,
     ):
         # Usa il path relativo per il JSON (nella stessa directory dello script)
         self.json_file = Path(json_file)
@@ -104,7 +104,7 @@ class RecipesPipeline:
                 json_path=str(self.json_file.absolute()),
                 collection_name="ricette",
                 persist_directory=str(self.chroma_dir),
-                reset_db=reset_db
+                reset_db=reset_db,
             )
 
             self.log("✅ ChromaDB popolato con successo")
@@ -177,7 +177,7 @@ def main():
     # Crea ed esegui la pipeline
     pipeline = RecipesPipeline(
         json_file=args.json_file,
-        chroma_dir=args.chroma_dir
+        chroma_dir=args.chroma_dir,
     )
 
     success = pipeline.run(reset_db=not args.no_reset)
